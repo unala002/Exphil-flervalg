@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-  <meta charset="UTF-8">
-  <title>Exphil Quiz Pro</title>
-  <style>
-    body { font-family: Arial; background:#f5f5f5; margin:20px; }
-    h1,h2 { text-align:center; }
-    .question { background:white; padding:15px; margin:10px auto; max-width:700px; border-radius:10px; }
-    button { margin-top:10px; padding:8px 12px; border:none; border-radius:5px; background:#4CAF50; color:white; cursor:pointer; }
-    .result { margin-top:8px; font-weight:bold; }
-    #score,#timer { text-align:center; font-size:18px; }
-  </style>
+<meta charset="UTF-8">
+<title>Exphil Quiz Deluxe</title>
+<style>
+body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg,#667eea,#764ba2); margin:0; color:#333; }
+.container { max-width:900px; margin:auto; padding:20px; }
+h1 { text-align:center; color:white; }
+.card { background:white; padding:20px; margin:20px 0; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.2); }
+button { margin-top:10px; padding:10px 15px; border:none; border-radius:8px; background:#667eea; color:white; cursor:pointer; }
+button:hover { background:#5a67d8; }
+.result { margin-top:10px; font-weight:bold; }
+#score,#timer { text-align:center; color:white; font-size:18px; }
+.correct { color:green; }
+.wrong { color:red; }
+</style>
 </head>
 <body>
-
-<h1>Exphil Eksamens-Trener</h1>
+<div class="container">
+<h1>Exphil Quiz 🎓</h1>
 <div id="timer">Tid: 0s</div>
 <div id="score">Poeng: 0</div>
 <div id="quiz"></div>
 <div style="text-align:center"><button onclick="finishQuiz()">Fullfør test</button></div>
 <div id="final"></div>
+</div>
 
 <script>
 let score = 0;
@@ -37,28 +42,25 @@ const sections = [
 {
  title:"Argumentasjon",
  questions: shuffle([
- {q:"Hva er et standpunkt?", options:["Et spørsmål","Konklusjon","Eksempel","Følelse"], answer:1, exp:"Standpunkt = konklusjonen argumentet støtter."},
- {q:"Hva er stråmann?", options:["Sterkt argument","Feilrepresentasjon","Fakta","Metode"], answer:1, exp:"Man forvrenger motpartens syn."},
- {q:"Deduktivt argument betyr?", options:["Sannsynlig","Nødvendig konklusjon","Følelser","Ugyldig"], answer:1, exp:"Konklusjonen følger logisk."},
- {q:"Normativ vs deskriptiv?", options:["Samme","Bør vs er","Følelse","Vitenskap"], answer:1, exp:"Normativ = bør, deskriptiv = er."}
+ {q:"Hva er et standpunkt?", options:["Et spørsmål","En konklusjon som støttes av argumenter","En følelse","Et eksempel"], answer:1, exp:"Standpunkt er hovedpåstanden."},
+ {q:"Hva er ad hominem?", options:["Logisk argument","Angrep på person","Faktaargument","Vitenskapelig metode"], answer:1, exp:"Angriper personen, ikke argumentet."},
+ {q:"Hva kjennetegner deduktive argumenter?", options:["Gir sannsynlighet","Gir nødvendig konklusjon","Er basert på følelser","Er alltid feil"], answer:1, exp:"Konklusjonen må være sann."}
  ])
 },
 {
  title:"Vitenskapsfilosofi",
  questions: shuffle([
- {q:"Epistemologi er?", options:["Moral","Kunnskap","Politikk","Språk"], answer:1, exp:"Erkjennelsesteori."},
- {q:"Falsifiserbarhet?", options:["Bevises","Motbevises","Føles","Ignoreres"], answer:1, exp:"Teorier må kunne testes og feiles."},
- {q:"Paradigme?", options:["Lov","Modell","Ramme","Eksperiment"], answer:2, exp:"Felles forståelsesramme."},
- {q:"Hypotetisk-deduktiv metode?", options:["Synsing","Test av hypoteser","Følelser","Autoritet"], answer:1, exp:"Hypotese → test → bekreft/avkreft."}
+ {q:"Hva er epistemologi?", options:["Læren om kunnskap","Læren om moral","Læren om politikk","Læren om språk"], answer:0, exp:"Epistemologi = kunnskap."},
+ {q:"Hva betyr falsifiserbarhet?", options:["Kan bevises","Kan motbevises","Er sant","Er subjektivt"], answer:1, exp:"Teorien må kunne testes og feile."},
+ {q:"Hva er et paradigme?", options:["En metode","En forståelsesramme","En lov","Et eksperiment"], answer:1, exp:"Ramme for forskning."}
  ])
 },
 {
  title:"Etikk",
  questions: shuffle([
- {q:"Utilitarisme?", options:["Regler","Konsekvenser","Følelser","Tilfeldig"], answer:1, exp:"Maksimer lykke."},
- {q:"Pliktetikk?", options:["Konsekvens","Regler","Lyst","Flaks"], answer:1, exp:"Følg moralske regler."},
- {q:"Dydsetikk?", options:["Regler","Konsekvenser","Karakter","Tall"], answer:2, exp:"Fokus på dyder."},
- {q:"Moralsk nihilisme?", options:["Alt er sant","Ingen moral finnes","Plikt","Lykke"], answer:1, exp:"Ingen objektiv moral."}
+ {q:"Hva avgjør handlinger i utilitarismen?", options:["Regler","Konsekvenser","Følelser","Tradisjon"], answer:1, exp:"Maksimer lykke."},
+ {q:"Hva sier pliktetikken?", options:["Følg regler","Se på konsekvenser","Følg følelser","Gjør hva du vil"], answer:0, exp:"Plikt over konsekvens."},
+ {q:"Hva fokuserer dydsetikk på?", options:["Handlinger","Konsekvenser","Karakter","Lover"], answer:2, exp:"Dyder og person."}
  ])
 }
 ];
@@ -67,10 +69,10 @@ const quizDiv = document.getElementById("quiz");
 
 sections.forEach((sec,s)=>{
  let secDiv=document.createElement("div");
- secDiv.innerHTML=`<h2>${sec.title}</h2>`;
+ secDiv.innerHTML=`<h2 style='color:white'>${sec.title}</h2>`;
  sec.questions.forEach((q,i)=>{
  let div=document.createElement("div");
- div.className="question";
+ div.className="card";
  let html=`<p><b>${q.q}</b></p>`;
  q.options.forEach((opt,idx)=>{
  html+=`<label><input type="radio" name="q${s}_${i}" value="${idx}"> ${opt}</label><br>`;
@@ -89,27 +91,26 @@ function check(s,i){
  if(!sel){res.innerText="Velg svar";return;}
  let q=sections[s].questions[i];
  if(parseInt(sel.value)===q.answer){
-  res.innerText="Riktig ✔ " + q.exp;
+  res.innerHTML=`<span class='correct'>Riktig ✔</span><br>${q.exp}`;
   score++;
  } else {
-  res.innerText="Feil ❌ " + q.exp;
+  res.innerHTML=`<span class='wrong'>Feil ❌</span><br>Riktig svar: ${q.options[q.answer]}<br>${q.exp}`;
  }
  answered++;
  document.getElementById("score").innerText="Poeng: "+score;
 }
 
 function finishQuiz(){
+ let percent=(score/answered)*100;
  let grade="";
- let total=answered;
- let percent=(score/total)*100;
  if(percent>85) grade="A";
  else if(percent>70) grade="B";
  else if(percent>55) grade="C";
  else if(percent>40) grade="D";
  else grade="E/F";
- document.getElementById("final").innerHTML=`<h2>Ferdig!</h2><p>Score: ${score}/${total} (${percent.toFixed(1)}%)</p><p>Karakter: ${grade}</p>`;
+ document.getElementById("final").innerHTML=`<div class='card'><h2>Resultat</h2><p>${score}/${answered} (${percent.toFixed(1)}%)</p><p>Karakter: ${grade}</p></div>`;
 }
 </script>
-
 </body>
 </html>
+
